@@ -57,7 +57,7 @@ export default function StartPageComponent() {
           placeholder="https://github.com/example"
           className="bg-gray-200 bg-opacity-50 px-3 py-2 w-full mb-7 placeholder-gray-100"
         />
-        <button onClick={handleConnectClick} className="bg-blue-500 hover:bg-blue-900 text-white text-3xl font-bold py-3 px-6 rounded-lg bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded border border-yellow-300 shadow-md">
+        <button onClick={handleConnectClick} className="bg-blue-500 hover:bg-blue-900 text-white text-3xl font-bold py-3 px-6 rounded-lg text-white font-bold border border-yellow-300 shadow-md">
           Connect Chatbot to Repo
         </button>
         {loading && <div className="absolute top-0 left-0 w-full h-full bg-gray-800 bg-opacity-90 flex items-center justify-center">
