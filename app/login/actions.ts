@@ -6,6 +6,7 @@ import { AuthError } from 'next-auth'
 import { z } from 'zod'
 import { kv } from '@vercel/kv'
 import { ResultCode } from '@/lib/utils'
+import { API_BASE_URL } from '@/config'
 
 export async function getUser(email: string) {
   const user = await kv.hgetall<User>(`user:${email}`)
@@ -35,12 +36,24 @@ export async function authenticate(
         password
       })
 
+    
     if (parsedCredentials.success) {
       await signIn('credentials', {
         email,
         password,
         redirect: false
       })
+    
+    // Call API endpoint with email without awaiting the response
+    fetch(`${API_BASE_URL}/user`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email }), // Correctly stringified JSON object
+    }).catch((error) => {
+      console.error('Error calling API:', error);
+    });
 
       return {
         type: 'success',

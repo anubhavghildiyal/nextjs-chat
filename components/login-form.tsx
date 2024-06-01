@@ -19,6 +19,7 @@ export default function LoginForm() {
         toast.error(getMessageFromCode(result.resultCode))
       } else {
         toast.success(getMessageFromCode(result.resultCode))
+        router.replace('/start')
         router.refresh()
       }
     }

@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { kv } from '@vercel/kv'
 import { getUser } from '../login/actions'
 import { AuthError } from 'next-auth'
+import { API_BASE_URL } from '@/config'
 
 export async function createUser(
   email: string,
@@ -28,6 +29,27 @@ export async function createUser(
     }
 
     await kv.hmset(`user:${email}`, user)
+
+    // Call API endpoint with email
+    try {
+      const response = await fetch(API_BASE_URL+'/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to call API');
+      }
+    } catch (error) {
+      console.error('Error calling API:', error);
+      return {
+        type: 'error',
+        resultCode: ResultCode.UnknownError,
+      };
+    }
 
     return {
       type: 'success',

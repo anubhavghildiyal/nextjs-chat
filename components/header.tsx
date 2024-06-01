@@ -16,8 +16,11 @@ import { SidebarToggle } from './sidebar-toggle'
 import { ChatHistory } from './chat-history'
 import { Session } from '@/lib/types'
 
+
 async function UserOrLogin() {
+  
   const session = (await auth()) as Session
+  console.log("AG: inside UserOrLogin func")
   return (
     <>
       {session?.user ? (
