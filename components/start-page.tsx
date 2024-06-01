@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Import the useRouter hook
 import { API_BASE_URL } from '@/config';
+import { IconGitHub, IconSpinner } from '@/components/ui/icons'
 
 export default function StartPageComponent() {
   const [githubUrl, setGithubUrl] = useState('');
@@ -53,7 +54,7 @@ export default function StartPageComponent() {
         <input
           type="text"
           value={githubUrl}
-          // onChange={(e) => setGithubUrl(e.target.value)}
+          onChange={(e) => setGithubUrl(e.target.value)}
           placeholder="https://github.com/example"
           className="bg-gray-200 bg-opacity-50 px-3 py-2 w-full mb-7 placeholder-gray-100"
         />
@@ -61,7 +62,9 @@ export default function StartPageComponent() {
           Connect Chatbot to Repo
         </button>
         {loading && <div className="absolute top-0 left-0 w-full h-full bg-gray-800 bg-opacity-90 flex items-center justify-center">
+        
           <h2 className="text-white text-3xl">Going through Code Files...</h2>
+          <IconSpinner className="mr-2 animate-spin" />
         </div>}
       </div>
     </div>
