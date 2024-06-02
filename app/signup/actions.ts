@@ -60,7 +60,7 @@ export async function createUser(
 
 interface Result {
   type: string
-  resultCode: ResultCode
+  resultCode: ResultCode,
 }
 
 export async function signup(

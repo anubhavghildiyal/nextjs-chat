@@ -15,7 +15,8 @@ export async function getUser(email: string) {
 
 interface Result {
   type: string
-  resultCode: ResultCode
+  resultCode: ResultCode,
+  repoNames?: string[]
 }
 
 export async function authenticate(
@@ -36,28 +37,38 @@ export async function authenticate(
         password
       })
 
-    
     if (parsedCredentials.success) {
       await signIn('credentials', {
         email,
         password,
         redirect: false
       })
-    
-    // Call API endpoint with email without awaiting the response
-    fetch(`${API_BASE_URL}/user`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: email }), // Correctly stringified JSON object
-    }).catch((error) => {
-      console.error('Error calling API:', error);
-    });
+      console.log('before API call')
+      
+      // Construct the URL with query parameters
+      const url = new URL(`${API_BASE_URL}/user`)
+      url.searchParams.append('email', email as string)
+
+      // Await the fetch call to the API endpoint
+      const response = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to call API endpoint oh noooooo :(((((')
+      }
+
+      const data = await response.json()
+      const repoNames = data.repoNames || []
+      console.log(' Fetched Repo Names:', repoNames)
 
       return {
         type: 'success',
-        resultCode: ResultCode.UserLoggedIn
+        resultCode: ResultCode.UserLoggedIn,
+        repoNames : repoNames
       }
     } else {
       return {
@@ -66,6 +77,7 @@ export async function authenticate(
       }
     }
   } catch (error) {
+    console.error('Error in authenticate function:', error)
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
@@ -78,6 +90,11 @@ export async function authenticate(
             type: 'error',
             resultCode: ResultCode.UnknownError
           }
+      }
+    } else {
+      return {
+        type: 'error',
+        resultCode: ResultCode.UnknownError
       }
     }
   }

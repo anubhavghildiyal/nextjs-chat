@@ -19,6 +19,8 @@ export default function LoginForm() {
         toast.error(getMessageFromCode(result.resultCode))
       } else {
         toast.success(getMessageFromCode(result.resultCode))
+        const repoNames = result.repoNames || [] 
+        console.log("Client: repoNames:", repoNames)
         router.replace('/start')
         router.refresh()
       }
